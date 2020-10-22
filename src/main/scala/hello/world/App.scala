@@ -9,6 +9,8 @@ import slinky.web.html._
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
+import java.util.UUID
+
 import hello.world.data._
 import hello.world.components._
 
@@ -27,9 +29,9 @@ object ReactLogo extends js.Object
 
   type UpdateState = () => Unit
   type AddTask = Task => Unit
-  type DeleteTask = Task => Unit
-  type CompleteTask = Task => Unit
-  type UncompleteTask = Task => Unit
+  type DeleteTask = UUID => Unit
+  type CompleteTask = UUID => Unit
+  type UncompleteTask = (UUID, Task) => Unit
   type UpdateFilter = Option[hello.world.data.Tag] => Unit
 
   type Props = Unit
@@ -55,13 +57,13 @@ object ReactLogo extends js.Object
       task => Api.createTask(task).foreach(_ => updateState())
 
     def deleteTask: DeleteTask =
-      task => Api.deleteTask(task).foreach(_ => updateState())
+      id => Api.deleteTask(id).foreach(_ => updateState())
 
     def completeTask: CompleteTask =
-      task => Api.completeTask(task).foreach(_ => updateState())
+      id => Api.completeTask(id).foreach(_ => updateState())
 
     def uncompleteTask: UncompleteTask =
-      task => Api.updateTask(task).foreach(_ => updateState())
+      (id, task) => Api.updateTask(id, task.uncomplete).foreach(_ => updateState())
 
     def updateFilter: UpdateFilter =
       filter => { updateTagFilter(filter)}

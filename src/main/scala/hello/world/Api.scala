@@ -8,6 +8,8 @@ import org.scalajs.dom
 import scala.scalajs.js
 import scala.concurrent.Future
 import org.scalajs.dom.experimental._
+import java.util.UUID
+
 import hello.world.data._
 
 object Api {
@@ -72,7 +74,7 @@ object Api {
       }
   }
 
-  def createTask(task: Task): Future[Task] = {
+  def createTask(task: Task): Future[UUID] = {
     val ri = defaultRequest
     ri.method = HttpMethod.POST
     ri.mode = RequestMode.cors
@@ -86,19 +88,19 @@ object Api {
       .toFuture
       .flatMap(response => response.text().toFuture)
       .map{ string =>
-        Decoder[Task].decodeJson(parse(string).toOption.get) match {
+        Decoder[UUID].decodeJson(parse(string).toOption.get) match {
           case Left(err) => throw err
-          case Right(task) => task
+          case Right(id) => id 
         }
       }
   }
 
-  def completeTask(task: Task): Future[Task] = {
+  def completeTask(id: UUID): Future[Task] = {
     val ri = defaultRequest
     ri.method = HttpMethod.POST
     ri.mode = RequestMode.cors
 
-    val r = new Request(s"${host}/api/task/${task.id.toString}/complete", ri)
+    val r = new Request(s"${host}/api/task/${id.toString}/complete", ri)
 
     Fetch
       .fetch(r)
@@ -112,14 +114,14 @@ object Api {
       }
   }
 
-  def updateTask(task: Task): Future[Option[Task]] = {
+  def updateTask(id: UUID, task: Task): Future[Option[Task]] = {
     val ri = defaultRequest
     ri.method = HttpMethod.POST
     ri.mode = RequestMode.cors
     ri.headers = applicationJson
     ri.body = task.asJson.spaces2
 
-    val r = new Request(s"${host}/api/task/${task.id.toString}", ri)
+    val r = new Request(s"${host}/api/task/${id.toString}", ri)
 
     Fetch
       .fetch(r)
@@ -133,12 +135,12 @@ object Api {
       }
   }
 
-  def deleteTask(task: Task): Future[Unit] = {
+  def deleteTask(id: UUID): Future[Unit] = {
     val ri = defaultRequest
     ri.method = HttpMethod.DELETE
     ri.mode = RequestMode.cors
 
-    val r = new Request(s"${host}/api/task/${task.id.toString}")
+    val r = new Request(s"${host}/api/task/${id.toString}")
 
     Fetch
       .fetch(r)

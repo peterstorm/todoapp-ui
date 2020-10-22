@@ -18,8 +18,9 @@ import hello.world.data._
     div(className := "p-8")(
       h1(className := "mb-4 text-3xl font-bold text-gray-700")("Tasks"),
       ul(className := "task-list")(
-        props.tasks.tasks.map { t =>
+        props.tasks.tasks.map { case (id, t) =>
             TaskView(
+              id,
               task = t,
               complete = props.complete,
               uncomplete = props.uncomplete,

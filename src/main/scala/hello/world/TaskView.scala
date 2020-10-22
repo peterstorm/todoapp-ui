@@ -3,6 +3,7 @@ package hello.world
 import slinky.core._
 import slinky.core.annotations.react
 import slinky.web.html._
+import java.util.UUID
 
 import hello.world.components._
 import hello.world.data._
@@ -30,6 +31,7 @@ import hello.world.data._
                             |hover:text-teal-500""".asClassNames
 
   case class Props(
+                  id: UUID,
                   task: Task,
                   complete: App.CompleteTask,
                   uncomplete: App.UncompleteTask,
@@ -37,15 +39,15 @@ import hello.world.data._
                   )
 
   val component: FunctionalComponent[Props] = FunctionalComponent[Props] {
-    case Props(task, complete, uncomplete, updateFilter) =>
+    case Props(id, task, complete, uncomplete, updateFilter) =>
 
       def clickHandler(): Unit =
-        complete(task)
+        complete(id)
 
       task.state match {
         case Active =>
           li(
-            key := task.id.toString,
+            key := id.toString,
             className := "task bg-white mb-8 bp-2 border-b"
           )(
             div(className := "mb-2 text-gray-700 block flex items-center")(
@@ -68,11 +70,11 @@ import hello.world.data._
           )
         case c: Completed =>
           li(
-            key := task.id.toString,
+            key := id.toString,
             className := "task bg-white mb-8 pb-2 border-b"
           )(
             div(className := "flex items-center")(
-              MaterialIcons.MdCheck(className := uncompleteClasses, onClick := (() => uncomplete(task))),
+              MaterialIcons.MdCheck(className := uncompleteClasses, onClick := (() => uncomplete(id, task))),
               p(className := "description strikethrough text-gray-500")(task.description)
             )
           )

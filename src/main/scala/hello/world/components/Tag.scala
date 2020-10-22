@@ -4,7 +4,6 @@ package components
 import slinky.core._
 import slinky.core.annotations.react
 import slinky.web.html._
-import hello.world.data.Tag
 
 @react object Tag {
   import ClassName._
@@ -33,7 +32,7 @@ import hello.world.data.Tag
   type DeleteHandler = () => Unit
 
   case class Props(
-                  tag: Tag,
+                  tag: hello.world.data.Tag,
                   status: Status,
                   clickHandler: Option[ClickHandler],
                   deleteHandler: Option[DeleteHandler]

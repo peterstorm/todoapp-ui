@@ -4,7 +4,7 @@ import slinky.core._
 import slinky.core.facade._
 import slinky.core.annotations.react
 import slinky.web.html._
-import hello.world.data.{Active, Id}
+import hello.world.data.{Active}
 import hello.world.components._
 import java.util.UUID
 
