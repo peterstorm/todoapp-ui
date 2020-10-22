@@ -6,7 +6,6 @@ import slinky.core.annotations.react
 import slinky.web.html._
 import hello.world.data.{Active}
 import hello.world.components._
-import java.util.UUID
 
 @react object TaskEditor {
   val component = FunctionalComponent[App.AddTask] { addTask =>
@@ -24,9 +23,7 @@ import java.util.UUID
           if(n == "") None else Some(n)
         }
 
-        val id = UUID.randomUUID()
-
-        val task = hello.world.data.Task(id, state, description, notes, tags)
+        val task = hello.world.data.Task(state, description, notes, tags)
 
         descriptionRef.current.value = ""
         notesRef.current.value = ""
